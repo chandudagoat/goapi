@@ -1,12 +1,10 @@
 package main
 
 import (
-	"context"
 	"goapi/database"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
-	"go.mongodb.org/mongo-driver/bson"
 )
 
 func main() {
@@ -20,17 +18,19 @@ func main() {
 	defer database.CloseMongo()
 
 	app := fiber.New()
+	groups(app)
+	routes(app)
 
-	app.Post("/", func(ctx *fiber.Ctx) error {
-		sampleDoc := bson.M{"name": "hello there"}
-		collection := database.GetCollection("todos")
-		newDoc, err := collection.InsertOne(context.TODO(), sampleDoc)
+	// app.Post("/", func(ctx *fiber.Ctx) error {
+	// 	sampleDoc := bson.M{"name": "hello there"}
+	// 	collection := database.GetCollection("todos")
+	// 	newDoc, err := collection.InsertOne(context.TODO(), sampleDoc)
 
-		if err != nil {
-			return ctx.Status(fiber.StatusInternalServerError).SendString("error inserting todo")
-		}
-		return ctx.JSON(newDoc)
-	})
+	// 	if err != nil {
+	// 		return ctx.Status(fiber.StatusInternalServerError).SendString("error inserting todo")
+	// 	}
+	// 	return ctx.JSON(newDoc)
+	// })
 
 	app.Listen(":3000")
 }
