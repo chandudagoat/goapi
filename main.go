@@ -2,6 +2,7 @@ package main
 
 import (
 	"goapi/database"
+	"os"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
@@ -21,18 +22,8 @@ func main() {
 	groups(app)
 	routes(app)
 
-	// app.Post("/", func(ctx *fiber.Ctx) error {
-	// 	sampleDoc := bson.M{"name": "hello there"}
-	// 	collection := database.GetCollection("todos")
-	// 	newDoc, err := collection.InsertOne(context.TODO(), sampleDoc)
-
-	// 	if err != nil {
-	// 		return ctx.Status(fiber.StatusInternalServerError).SendString("error inserting todo")
-	// 	}
-	// 	return ctx.JSON(newDoc)
-	// })
-
-	app.Listen(":3000")
+	port := os.Getenv("PORT")
+	app.Listen(":" + port)
 }
 
 func init_app() error {
@@ -50,9 +41,12 @@ func init_app() error {
 }
 
 func load_env() error {
-	err := godotenv.Load()
-	if err != nil {
-		return err
+	go_env := os.Getenv("GO_ENV")
+	if go_env == "" {
+		err := godotenv.Load()
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }
