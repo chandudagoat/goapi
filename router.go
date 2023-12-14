@@ -16,6 +16,11 @@ func routes(app *fiber.App) {
 func groups(app *fiber.App) {
 	// create the library routes
 	libGroup := app.Group("/library")
+
+	// get reqs
 	libGroup.Get("/test", handlers.TestHandler)
+	libGroup.Get("/get_libs", handlers.GetLibraries)
+
+	// post req
 	libGroup.Post("/create", handlers.CreateLibrary)
 }
